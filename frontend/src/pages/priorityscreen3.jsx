@@ -122,7 +122,7 @@ export default function Dashboard() {
           <button
             onClick={() => refreshAll(true)}
             disabled={reqLoading}
-            className="flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-medium transition-all
+            className="flex items-center gap-2 px-4 py-2.5 rounded-xl text-base font-medium transition-all
               bg-cyan-400/12 border border-cyan-300/35 text-cyan-200 shadow-[0_0_18px_rgba(34,211,238,0.12)]
               hover:bg-cyan-300/20 hover:text-white disabled:opacity-40 disabled:cursor-not-allowed"
           >
@@ -144,7 +144,7 @@ export default function Dashboard() {
                 <button
                   key={f.key}
                   onClick={() => handleQuickFilter(f.key)}
-                  className={`px-3.5 py-1.5 rounded-lg text-xs font-mono font-medium transition-all
+                  className={`px-4 py-2 rounded-lg text-sm font-mono font-black transition-all
                     ${activeFilter === f.key
                       ? 'bg-gradient-to-r from-cyan-400/25 to-emerald-400/20 border border-cyan-300/55 text-cyan-100 shadow-[0_0_16px_rgba(34,211,238,0.18)]'
                       : 'bg-white/[0.06] border border-white/12 text-slate-300 hover:text-white hover:border-cyan-300/35'

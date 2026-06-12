@@ -10,6 +10,7 @@ import {
   getCachedHighPriorityRequirements,
   loadHighPriorityRequirements,
 } from '../lib/api/highPriorityData'
+import NoDataTable from '../components/NoDataTable'
 import PriorityScreen3 from './priorityscreen3'
 
 const QUICK_FILTERS = [
@@ -131,7 +132,7 @@ function MetricCard({ label, value }) {
       <div className="absolute inset-0 rounded-[24px] bg-gradient-to-br from-white/[0.03] to-transparent" />
 
       <div className="relative z-10">
-        <p className="text-[10px] uppercase tracking-[0.25em] text-cyan-300">
+        <p className="text-sm font-black uppercase tracking-[0.22em] text-cyan-300">
           {label}
         </p>
 
@@ -422,11 +423,13 @@ export default function Dashboard({ onComplete }) {
       </div>
 
       <div className="relative z-10 max-w-[1600px] mx-auto px-4 sm:px-6 py-8 space-y-6">
-        <div>
-          <h1 className="text-4xl font-black text-white sm:text-6xl">
-            BDM Wise
-          </h1>
-        </div>
+        {activeBdm ? (
+          <div>
+            <h1 className="text-4xl font-black text-white sm:text-6xl">
+              BDM Wise
+            </h1>
+          </div>
+        ) : null}
 
         {/* FILTERS */}
         <section className="rounded-[28px] border border-cyan-500/10 bg-[#06101f]/95 p-5 backdrop-blur-xl shadow-[0_0_40px_rgba(0,255,255,0.04)]">
@@ -471,9 +474,7 @@ export default function Dashboard({ onComplete }) {
                 {reqError}
               </div>
             ) : !activeBdm ? (
-              <div className="rounded-[30px] border border-cyan-500/10 bg-[#06101f]/95 p-20 text-center backdrop-blur-xl">
-                No data found
-              </div>
+              <NoDataTable title="No BDM Data" />
             ) : showPriorityScreen ? (
               <PriorityScreen3 />
             ) : (
@@ -484,7 +485,7 @@ export default function Dashboard({ onComplete }) {
                 {/* HEADER */}
                 <div className="px-6 pt-6 pb-4 flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-[rgba(0,245,255,0.08)]">
                   <div>
-                    <p className="text-xs uppercase tracking-[0.35em] text-cyan-300">
+                    <p className="text-base font-black uppercase tracking-[0.28em] text-cyan-300">
                       Recruitment Manager
                     </p>
 
@@ -540,7 +541,7 @@ export default function Dashboard({ onComplete }) {
                         ].map((column) => (
                           <th
                             key={column}
-                            className="px-8 py-5 text-left text-[11px] uppercase tracking-[0.3em] text-cyan-300"
+                            className="px-8 py-5 text-left text-sm font-black uppercase tracking-[0.28em] text-cyan-300"
                           >
                             {column}
                           </th>

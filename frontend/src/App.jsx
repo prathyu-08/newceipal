@@ -10,7 +10,7 @@ import {
 } from './lib/api/dashboardPreload'
 
 const SLIDES = [
-  { key: 'status' },
+  { key: 'status', duration: 25000 },
   { key: 'dashboard' },
   { key: 'priority' },
   { key: 'bdm' },
@@ -36,7 +36,7 @@ export default function App() {
   useEffect(() => {
     if (SLIDES[activeSlide].key === 'dashboard') return undefined
 
-    const timer = setTimeout(showNextSlide, SLIDE_MS)
+    const timer = setTimeout(showNextSlide, SLIDES[activeSlide].duration || SLIDE_MS)
 
     return () => clearTimeout(timer)
   }, [activeSlide, showNextSlide])

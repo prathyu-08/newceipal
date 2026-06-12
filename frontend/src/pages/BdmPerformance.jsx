@@ -71,7 +71,7 @@ export default function BdmPerformance() {
               <button
                 key={option}
                 onClick={() => setPeriod(option)}
-                className={`rounded-xl px-5 py-2 text-sm font-black capitalize transition ${
+                className={`rounded-xl px-6 py-2.5 text-base font-black capitalize transition ${
                   period === option
                     ? 'bg-cyan-500 text-slate-950'
                     : 'text-slate-300 hover:bg-white/[0.06]'

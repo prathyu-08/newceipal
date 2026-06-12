@@ -9,6 +9,7 @@
  */
 
 import { useState, useMemo, useEffect } from 'react'
+import NoDataTable from './NoDataTable'
 
 const PAGE_DURATION = 15000
 
@@ -56,7 +57,7 @@ function PriorityBadge({ priority }) {
 
   return (
     <span
-      className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium tracking-wide"
+      className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-sm font-medium tracking-wide"
       style={{
         background: config.bg,
         border: `1px solid ${config.border}`,
@@ -104,7 +105,7 @@ function StatusBadge({ status }) {
 
   return (
     <span
-      className="inline-flex items-center px-3 py-1.5 rounded-full text-xs font-medium tracking-wide"
+      className="inline-flex items-center px-3 py-1.5 rounded-full text-sm font-medium tracking-wide"
       style={{
         background: config.bg,
         border: `1px solid ${config.border}`,
@@ -269,6 +270,15 @@ export default function HighPriorityTable({
     { key: 'submission_status', label: 'Submission Status' },
   ]
 
+  if (!loading && !error && sorted.length === 0) {
+    return (
+      <NoDataTable
+        title="No Priority Data"
+        columns={columns.map((column) => column.label)}
+      />
+    )
+  }
+
   return (
     <div className="overflow-hidden rounded-2xl border border-cyan-300/25 bg-[#061525]/95 shadow-[0_0_48px_rgba(34,211,238,0.14)] fade-up delay-500">
 
@@ -282,7 +292,7 @@ export default function HighPriorityTable({
                 <th
                   key={col.key}
                   onClick={() => toggleSort(col.key)}
-                  className="px-5 py-4 text-left text-xs font-mono font-bold text-cyan-200 tracking-widest uppercase cursor-pointer hover:text-emerald-200 transition-colors select-none"
+                  className="px-5 py-4 text-left text-sm font-mono font-black text-cyan-200 tracking-widest uppercase cursor-pointer hover:text-emerald-200 transition-colors select-none"
                 >
                   {col.label}
                   <SortIcon field={col.key} />
@@ -305,15 +315,6 @@ export default function HighPriorityTable({
               Array.from({ length: 6 }).map((_, i) => (
                 <SkeletonRow key={i} i={i} />
               ))
-            ) : paged.length === 0 ? (
-              <tr>
-                <td
-                  colSpan={7}
-                  className="px-5 py-16 text-center text-slate-600 text-sm font-mono"
-                >
-                  No activity found for today.
-                </td>
-              </tr>
             ) : (
               paged.map((row, i) => (
                 <tr
@@ -323,13 +324,13 @@ export default function HighPriorityTable({
 
                   {/* Recruiter */}
                   <td className="px-5 py-4">
-                    <span className="text-cyan-100 font-medium text-sm">
+                    <span className="text-cyan-100 font-medium text-base">
                       {getLead(row.lead)}
                     </span>
                   </td>
 
                   <td className="px-5 py-4">
-                    <span className="text-slate-100 font-medium text-sm">
+                    <span className="text-slate-100 font-medium text-base">
                       {getAssignedRecruiter(row.recruiter)}
                     </span>
                   </td>
@@ -366,7 +367,7 @@ export default function HighPriorityTable({
                   {/* Time */}
                   <td className="px-5 py-4">
                     <span
-                      className="font-mono text-sm"
+                      className="font-mono text-base"
                       style={{ color: '#fbbf24' }}
                     >
                       {getTimeToSubmit(row)}

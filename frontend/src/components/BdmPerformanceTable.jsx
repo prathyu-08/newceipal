@@ -4,6 +4,8 @@
  * Executive card layout for BDM KPI performance.
  */
 
+import NoDataTable from './NoDataTable'
+
 const metricRows = [
   { label: 'Requirements', key: 'requirements_received', tone: 'cyan' },
   { label: 'Submitted', key: 'profiles_submitted', tone: 'cyan' },
@@ -22,7 +24,7 @@ const toneColor = {
 function MetricLine({ label, value, tone }) {
   return (
     <div className="grid grid-cols-[1fr_auto] items-center gap-6 border-b border-white/7 py-1.5 last:border-b-0">
-      <span className="text-lg font-black tracking-[-0.01em] text-white">
+      <span className="text-2xl font-black tracking-normal text-white">
         {label}
       </span>
       <span
@@ -96,21 +98,31 @@ export default function BdmPerformanceTable({ data, loading, error }) {
 
   return (
     <section className="bdm-panel">
-      <div className="grid grid-cols-1 gap-5 lg:grid-cols-3">
-        {loading
-          ? Array.from({ length: 5 }).map((_, index) => <SkeletonCard key={index} />)
-          : rows.map((row, index) => (
-              <BdmCard
-                key={`${row.bdm_name}-${index}`}
-                row={row}
-                featured={index === featuredIndex && rows.length > 1}
-              />
-            ))}
-      </div>
-
-      {!loading && rows.length === 0 && (
-        <div className="flex min-h-[280px] items-center justify-center text-center font-mono text-sm text-slate-500">
-          No KPI data found.
+      {loading ? (
+        <div className="grid grid-cols-1 gap-5 lg:grid-cols-3">
+          {Array.from({ length: 5 }).map((_, index) => <SkeletonCard key={index} />)}
+        </div>
+      ) : rows.length === 0 ? (
+        <NoDataTable
+          title="No BDM Data"
+          columns={[
+            'BDM',
+            'Requirements',
+            'Submitted',
+            'Fbk Pending',
+            'Interviews',
+            'Closures',
+          ]}
+        />
+      ) : (
+        <div className="grid grid-cols-1 gap-5 lg:grid-cols-3">
+          {rows.map((row, index) => (
+               <BdmCard
+                 key={`${row.bdm_name}-${index}`}
+                 row={row}
+                 featured={index === featuredIndex && rows.length > 1}
+               />
+          ))}
         </div>
       )}
     </section>
