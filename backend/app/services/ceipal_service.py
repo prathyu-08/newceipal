@@ -173,8 +173,11 @@ def _normalize_priority(value: Any) -> str:
     return lookup.get(text.lower(), text)
 
 
-def _find_priority_value(data: Any) -> str:
+def _find_priority_value(data: Any, _depth: int = 0) -> str:
     """Find priority in CEIPAL job details, including custom job fields."""
+
+    if _depth > 8:
+        return ""
 
     priority_keys = {
         "priority",
@@ -211,13 +214,13 @@ def _find_priority_value(data: Any) -> str:
                         return normalized
 
         for value in data.values():
-            found = _find_priority_value(value)
+            found = _find_priority_value(value, _depth + 1)
             if found:
                 return found
 
     if isinstance(data, list):
         for item in data:
-            found = _find_priority_value(item)
+            found = _find_priority_value(item, _depth + 1)
             if found:
                 return found
 
@@ -334,6 +337,7 @@ _JOBS_DATE_TTL = settings.jobs_date_cache_ttl_seconds
 _JOBPOSTS_SCREEN_TTL = settings.jobposts_screen_cache_ttl_seconds
 
 _users_cache: dict[str, Any] = {"data": None, "expires_at": 0.0}
+_users_lock = RLock()
 _subs_cache: dict[str, Any] = {}
 # key = "YYYY-MM-DD:YYYY-MM-DD" (from_date:to_date) or "default"
 _jobs_date_cache: dict[str, dict] = {}
@@ -700,9 +704,13 @@ def get_users() -> list[dict]:
         logger.debug("get_users cache HIT")
         return _users_cache["data"]
 
-    records, _ = _paginated_get("/v2/getUsersList", get_headers(), max_pages=0)
-    _users_cache["data"] = records
-    _users_cache["expires_at"] = now + _USERS_TTL
+    with _users_lock:
+        # Re-check inside lock to prevent thundering herd
+        if _users_cache["data"] is not None and time.time() < _users_cache["expires_at"]:
+            return _users_cache["data"]
+        records, _ = _paginated_get("/v2/getUsersList", get_headers(), max_pages=0)
+        _users_cache["data"] = records
+        _users_cache["expires_at"] = time.time() + _USERS_TTL
     return records
 
 

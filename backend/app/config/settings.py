@@ -35,6 +35,11 @@ class Settings(BaseSettings):
     redis_url: str = ""
     request_dedupe_ttl_seconds: int = 30
 
+    # Auth — set to a strong random secret in production.
+    # Generate: python -c "import secrets; print(secrets.token_hex(32))"
+    # Leave empty only in local development.
+    dashboard_api_key: str = ""
+
     # Where to persist job-detail cache across restarts.
     job_detail_cache_dir: str = ".cache"
 

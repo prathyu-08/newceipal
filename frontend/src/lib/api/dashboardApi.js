@@ -1,4 +1,5 @@
 const BASE_URL = import.meta.env.VITE_API_BASE_URL || '/api'
+const API_KEY = import.meta.env.VITE_API_KEY || ''
 const inFlightRequests = new Map()
 
 async function apiFetch(path) {
@@ -7,9 +8,12 @@ async function apiFetch(path) {
   }
 
   const request = (async () => {
+    const headers = { Accept: 'application/json' }
+    if (API_KEY) headers['X-API-Key'] = API_KEY
+
     const response = await fetch(`${BASE_URL}${path}`, {
       method: 'GET',
-      headers: { Accept: 'application/json' },
+      headers,
     })
 
     if (!response.ok) {
