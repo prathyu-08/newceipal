@@ -1,11 +1,29 @@
+# Secrets
 .env
 .env.*
 backend/.env
 frontend/.env.local
+
+# Dependencies
 node_modules/
 frontend/node_modules/
+
+# Python
 __pycache__/
 *.pyc
-.DS_Store
+*.pyo
 venv/
 .venv/
+
+# Cache files (runtime-generated, not source)
+.cache/
+backend/.cache/
+*.cache.json
+
+# OS
+.DS_Store
+backend/.DS_Store
+frontend/.DS_Store
+
+# Build output
+frontend/dist/

@@ -19,7 +19,7 @@ import asyncio
 import logging
 import time
 from concurrent.futures import ThreadPoolExecutor
-from datetime import datetime, timedelta
+from datetime import date, datetime, timedelta
 from threading import RLock
 from typing import Any, Optional
 
@@ -296,7 +296,7 @@ async def build_dashboard_stats() -> dict:
     ).model_dump()
 
 
-async def build_recruiting_status(today: datetime) -> dict:
+async def build_recruiting_status(today: date) -> dict:
     """Build recruiting status for a given date."""
     try:
         jobs_result, users_result, subs_result = await asyncio.gather(
@@ -1007,7 +1007,7 @@ async def _get_dashboard_stats_cached() -> dict:
     return await cached_response("dashboard:stats", settings.stats_cache_ttl_seconds if hasattr(settings, "stats_cache_ttl_seconds") else 60, build_dashboard_stats)
 
 
-async def _get_recruiting_status_cached(today: datetime) -> dict:
+async def _get_recruiting_status_cached(today: date) -> dict:
     return await cached_response(
         f"dashboard:status:{today.isoformat()}",
         settings.status_cache_ttl_seconds,
